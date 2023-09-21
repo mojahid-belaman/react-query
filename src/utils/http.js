@@ -16,3 +16,24 @@ export async function fetchEvents({ signal, searchTerm }) {
 
   return events;
 }
+
+export async function createEvent(eventData) {
+  const response = await fetch("http://localhost:3000/events", {
+    method: "POST",
+    body: JSON.stringify(eventData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error("error occured when creating an event!");
+    error.status = response.status;
+    error.info = await response.json();
+    throw error;
+  }
+
+  const { events } = await response.json();
+
+  return events;
+}
